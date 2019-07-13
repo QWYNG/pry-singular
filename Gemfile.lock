@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    pry-singular (0.1.0)
+    pry-singular (0.1.1)
       pry
 
 GEM

@@ -4,20 +4,18 @@ require 'pry'
 module PrySingular
   class << self
     def set_class(*klasses)
-      import_class_command(klasses)
+      klasses.each(&method(:import_class_command))
     end
 
     private
 
-    def import_class_command(klasses)
+    def import_class_command(klass)
       commands = Pry::CommandSet.new do
-        klasses.each do |klass|
-          klass.public_methods.each do |klass_method|
-            command "#{klass_method}", "#{klass}.#{klass_method}" do
-              klass.class_eval <<-EOS
-                #{Readline::HISTORY.to_a.last.gsub(' ', '')}
-              EOS
-            end
+        klass.public_methods.each do |klass_method|
+          command "#{klass_method}", "#{klass}.#{klass_method}" do
+            klass.class_eval <<-EOS
+              #{Readline::HISTORY.to_a.last.gsub(' ', '')}
+            EOS
           end
         end
       end
