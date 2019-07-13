@@ -30,6 +30,9 @@ then you can use singular method of set class as pry command
 also you can use argument 
 
     pry(main)> create :user
+    
+Pry-Singular add only `singleton_methods(true)` for do not create core Ruby methods commands
+  
 
 ## Development
 
