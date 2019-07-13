@@ -11,7 +11,7 @@ module PrySingular
 
     def import_class_command(klass)
       commands = Pry::CommandSet.new do
-        klass.public_methods.each do |klass_method|
+        klass.singleton_methods.each do |klass_method|
           command "#{klass_method}", "#{klass}.#{klass_method}" do
             klass.class_eval <<-EOS
               #{Readline::HISTORY.to_a.last.gsub(' ', '')}
