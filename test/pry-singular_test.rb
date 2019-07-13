@@ -21,4 +21,9 @@ class PrySingularTest < Minitest::Test
     assert_includes(Pry::Commands.list_commands, "hello")
     assert_includes(Pry::Commands.list_commands, "oha")
   end
+
+  def test_avoid_setting_ancestors_class_methods
+    refute_includes(Pry::Commands.list_commands, "class")
+    refute_includes(Pry::Commands.list_commands, "new")
+  end
 end
