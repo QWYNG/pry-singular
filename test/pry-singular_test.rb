@@ -13,6 +13,13 @@ class PrySingularTest < Minitest::Test
     end
   end
 
+  class TestClassWithMultipleMethods
+    class << self
+      def method_one;end
+      def method_two;end
+    end
+  end
+
   def setup
     PrySingular.set_class(TestClass1, TestClass2)
   end
@@ -25,5 +32,11 @@ class PrySingularTest < Minitest::Test
   def test_avoid_setting_ancestors_class_methods
     refute_includes(Pry::Commands.list_commands, "class")
     refute_includes(Pry::Commands.list_commands, "new")
+  end
+
+  def test_import_the_specific_methods
+    PrySingular.set_class TestClassWithMultipleMethods, only: [:method_one]
+    assert_includes(Pry::Commands.list_commands, "method_one")
+    refute_includes(Pry::Commands.list_commands, "method_two")
   end
 end
