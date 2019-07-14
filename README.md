@@ -1,4 +1,5 @@
 # Pry-Singular
+[![Build Status](https://travis-ci.org/QWYNG/pry-singular.svg?branch=master)](https://travis-ci.org/QWYNG/pry-singular)
 
 ## Installation
 
