@@ -3,13 +3,13 @@ require_relative "test_helper"
 class PrySingularTest < Minitest::Test
   class TestClass1
     class << self
-      def hello ;end
+      def class1method ;end
     end
   end
 
   class TestClass2
     class << self
-      def oha ;end
+      def class2method ;end
     end
   end
 
@@ -18,8 +18,8 @@ class PrySingularTest < Minitest::Test
   end
 
   def test_set_class_method_to_pry
-    assert_includes(Pry::Commands.list_commands, "hello")
-    assert_includes(Pry::Commands.list_commands, "oha")
+    assert_includes(Pry::Commands.list_commands, "class1method")
+    assert_includes(Pry::Commands.list_commands, "class2method")
   end
 
   def test_avoid_setting_ancestors_class_methods
