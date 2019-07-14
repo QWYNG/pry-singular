@@ -33,7 +33,20 @@ also you can use argument
     pry(main)> create :user
     
 Pry-Singular add only `singleton_methods(true)` for do not create core Ruby methods commands
-  
+
+If you have a method you want to specify write　as below
+
+```ruby
+PrySingular.set_class FactoryBot, only: [:build, :attributes_for]
+```
+
+Also, If you have a method that you don't want to command
+
+```ruby
+PrySingular.set_class FactoryBot, except: [:create]
+```
+
+
 
 ## Development
 
