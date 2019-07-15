@@ -25,7 +25,7 @@ module PrySingular
         singular_methods.each do |klass_method|
           command "#{klass_method}", "#{klass}.#{klass_method}" do
             klass.class_eval <<-EOS
-              #{Readline::HISTORY.to_a.last.gsub(' ', '')}
+              #{parse_readline!(Readline::HISTORY.to_a.last)}
             EOS
           end
         end
@@ -42,6 +42,11 @@ module PrySingular
         return options[:only].select { |method_name| klass.respond_to?(method_name) }
       end
       klass.singleton_methods - options[:except]
+    end
+
+    def parse_readline!(readline_history_element)
+      method, args = readline_history_element.split(" ", 2)
+      method + ' ' + args.gsub(' ', '')
     end
   end
 end
