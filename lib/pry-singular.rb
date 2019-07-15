@@ -1,5 +1,6 @@
-require "pry-singular/version"
+require 'pry-singular/version'
 require 'pry-singular/extract_pry_singular_options'
+require 'pry-singular/parse_readline'
 require 'pry'
 
 module PrySingular
@@ -25,7 +26,7 @@ module PrySingular
         singular_methods.each do |klass_method|
           command "#{klass_method}", "#{klass}.#{klass_method}" do
             klass.class_eval <<-EOS
-              #{parse_readline!(Readline::HISTORY.to_a.last)}
+              #{parse_singular_method_command(Readline::HISTORY.to_a.last)}
             EOS
           end
         end
@@ -41,12 +42,8 @@ module PrySingular
       if options[:only].any?
         return options[:only].select { |method_name| klass.respond_to?(method_name) }
       end
-      klass.singleton_methods - options[:except]
-    end
 
-    def parse_readline!(readline_history_element)
-      method, args = readline_history_element.split(" ", 2)
-      method + ' ' + args.gsub(' ', '')
+      klass.singleton_methods - options[:except]
     end
   end
 end
