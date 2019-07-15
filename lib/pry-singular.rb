@@ -25,8 +25,9 @@ module PrySingular
       set_pry_command do
         singular_methods.each do |klass_method|
           command "#{klass_method}", "#{klass}.#{klass_method}" do
+            singular_method_code = parse_singular_method_command(Readline::HISTORY.to_a.last)
             klass.class_eval <<-EOS
-              #{parse_singular_method_command(Readline::HISTORY.to_a.last)}
+              #{singular_method_code}
             EOS
           end
         end
