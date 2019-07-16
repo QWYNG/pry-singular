@@ -1,55 +1,74 @@
-require_relative "test_helper"
+require_relative 'test_helper'
 
 class PrySingularTest < Minitest::Test
   class TestClass1
     class << self
-      def class1method ;end
+      def class1method; end
     end
   end
 
   class TestClass2
     class << self
-      def class2method ;end
+      def class2method; end
     end
   end
 
   class TestClassWithOnlyOption
     class << self
-      def require_method;end
-      def not_require_method;end
+      def require_method; end
+
+      def not_require_method; end
     end
   end
 
   class TestClassWithExceptOption
     class << self
-      def need_to_exclude_method;end
-      def need_to_include_method1;end
-      def need_to_include_method2;end
+      def need_to_exclude_method; end
+
+      def need_to_include_method1; end
+
+      def need_to_include_method2; end
+    end
+
+    def TestClassWithMethodArgument;
+      class << self
+        def method_with_argument(arg)
+          p arg
+        end
+
+        def method_with_multiple_argument(args1, args2)
+          p args1, args2
+        end
+      end
     end
   end
 
   def test_set_class_method_to_pry
     PrySingular.set_class(TestClass1, TestClass2)
-    assert_includes(Pry::Commands.list_commands, "class1method")
-    assert_includes(Pry::Commands.list_commands, "class2method")
+    assert_includes(Pry::Commands.list_commands, 'class1method')
+    assert_includes(Pry::Commands.list_commands, 'class2method')
   end
 
   def test_avoid_setting_ancestors_class_methods
     PrySingular.set_class(TestClass1, TestClass2)
-    refute_includes(Pry::Commands.list_commands, "class")
-    refute_includes(Pry::Commands.list_commands, "new")
+    refute_includes(Pry::Commands.list_commands, 'class')
+    refute_includes(Pry::Commands.list_commands, 'new')
   end
 
   def test_import_the_specific_methods
     PrySingular.set_class TestClassWithOnlyOption, only: [:require_method]
-    assert_includes(Pry::Commands.list_commands, "require_method")
-    refute_includes(Pry::Commands.list_commands, "not_require_method")
+    assert_includes(Pry::Commands.list_commands, 'require_method')
+    refute_includes(Pry::Commands.list_commands, 'not_require_method')
   end
 
   def test_import_methods_expect
     PrySingular.set_class TestClassWithExceptOption, except: [:need_to_exclude_method]
-    refute_includes(Pry::Commands.list_commands, "need_to_exclude_method")
-    assert_includes(Pry::Commands.list_commands, "need_to_include_method1")
-    assert_includes(Pry::Commands.list_commands, "need_to_include_method2")
+    refute_includes(Pry::Commands.list_commands, 'need_to_exclude_method')
+    assert_includes(Pry::Commands.list_commands, 'need_to_include_method1')
+    assert_includes(Pry::Commands.list_commands, 'need_to_include_method2')
+  end
+
+  def test_call_method
+
   end
 end
