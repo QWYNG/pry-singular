@@ -43,7 +43,7 @@ PrySingular.set_class FactoryBot, only: [:build, :attributes_for]
 Also, If you have a method that you don't want to command
 
 ```ruby
-PrySingular.set_class FactoryBot, except: [:create]
+PrySingular.set_class FactoryBot, except: :create
 ```
 
 
