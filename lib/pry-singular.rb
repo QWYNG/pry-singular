@@ -1,11 +1,11 @@
-require 'pry-singular/version'
-require 'pry-singular/extract_pry_singular_options'
-require 'pry-singular/parse_readline'
-require 'pry'
+require "pry-singular/version"
+require "pry-singular/extract_pry_singular_options"
+require "pry-singular/parse_readline"
+require "pry"
 
 module PrySingular
   class << self
-    def set_class(*klasses)
+    def make_command(*klasses)
       options = klasses.extract_pry_singular_options!
       normalize_pry_singular_options!(options)
       klasses.each do |klass|
@@ -22,11 +22,11 @@ module PrySingular
 
     def import_class_command(klass, options)
       singular_methods = adapt_options_singleton_methods(klass, options)
-      set_pry_command do
+      import_pry_command do
         singular_methods.each do |klass_method|
-          command "#{klass_method}", "#{klass}.#{klass_method}" do
+          command klass_method.to_s, "#{klass}.#{klass_method}" do
             extend PrySingular::Slop
-            klass.class_eval <<-EOS
+            klass.class_eval <<-EOS, binding, __FILE__, __LINE__ + 1
               #{parse_singular_method_command(Readline::HISTORY.to_a.last)}
             EOS
           end
@@ -34,8 +34,8 @@ module PrySingular
       end
     end
 
-    def set_pry_command(&block)
-      commands = Pry::CommandSet.new &block
+    def import_pry_command(&block)
+      commands = Pry::CommandSet.new(&block)
       Pry.config.commands.import(commands)
     end
 
