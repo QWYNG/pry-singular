@@ -25,9 +25,8 @@ module PrySingular
       import_pry_command do
         singular_methods.each do |klass_method|
           command klass_method.to_s, "#{klass}.#{klass_method}" do
-            extend PrySingular::Slop
             klass.class_eval <<-EOS, binding, __FILE__, __LINE__ + 1
-              #{parse_singular_method_command(Readline::HISTORY.to_a.last)}
+              #{PrySingular::Slop.parse_singular_method_command(Readline::HISTORY.to_a.last)}
             EOS
           end
         end
