@@ -1,13 +1,13 @@
 require "pry-singular/version"
-require "pry-singular/extract_pry_singular_options"
 require "pry-singular/parse_readline"
 require "pry"
 
 module PrySingular
+  Options = Struct.new(:only, :except)
+
   class << self
-    def make_command(*klasses)
-      options = klasses.extract_pry_singular_options!
-      normalize_pry_singular_options!(options)
+    def make_command(*klasses, **options)
+      options = normalize_pry_singular_options!(options)
       klasses.each do |klass|
         import_class_command(klass, options)
       end
@@ -16,8 +16,7 @@ module PrySingular
     private
 
     def normalize_pry_singular_options!(options)
-      options[:only] = Array(options[:only])
-      options[:except] = Array(options[:except])
+      Options.new(Array(options[:only]), Array(options[:except]))
     end
 
     def import_class_command(klass, options)
@@ -39,11 +38,11 @@ module PrySingular
     end
 
     def adapt_options_singleton_methods(klass, options)
-      if options[:only].any?
-        return options[:only].select { |method_name| klass.respond_to?(method_name) }
+      if options.only.any?
+        return options.only.select { |method_name| klass.respond_to?(method_name) }
       end
 
-      klass.singleton_methods - options[:except]
+      klass.singleton_methods - options.except
     end
   end
 end
