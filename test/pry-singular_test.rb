@@ -39,25 +39,25 @@ class PrySingularTest < Minitest::Test
   end
 
   def test_make_command_method_to_pry
-    PrySingular.make_command(TestClass1, TestClass2)
+    PrySingular.make_commands(TestClass1, TestClass2)
     assert_includes(Pry::Commands.list_commands, "class1method")
     assert_includes(Pry::Commands.list_commands, "class2method")
   end
 
   def test_avoid_setting_ancestors_class_methods
-    PrySingular.make_command(TestClass1, TestClass2)
+    PrySingular.make_commands(TestClass1, TestClass2)
     refute_includes(Pry::Commands.list_commands, "class")
     refute_includes(Pry::Commands.list_commands, "new")
   end
 
   def test_import_the_specific_methods
-    PrySingular.make_command TestClassWithOnlyOption, only: [:require_method]
+    PrySingular.make_commands TestClassWithOnlyOption, only: :require_method
     assert_includes(Pry::Commands.list_commands, "require_method")
     refute_includes(Pry::Commands.list_commands, "not_require_method")
   end
 
   def test_import_methods_expect
-    PrySingular.make_command TestClassWithExceptOption, except: [:need_to_exclude_method]
+    PrySingular.make_commands TestClassWithExceptOption, except: :need_to_exclude_method
     refute_includes(Pry::Commands.list_commands, "need_to_exclude_method")
     assert_includes(Pry::Commands.list_commands, "need_to_include_method1")
     assert_includes(Pry::Commands.list_commands, "need_to_include_method2")

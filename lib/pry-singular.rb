@@ -6,7 +6,7 @@ module PrySingular
   Options = Struct.new(:only, :except)
 
   class << self
-    def make_command(*klasses, **options)
+    def make_commands(*klasses, **options)
       options = normalize_pry_singular_options!(options)
       klasses.each do |klass|
         import_class_command(klass, options)
