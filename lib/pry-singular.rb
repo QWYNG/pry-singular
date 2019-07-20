@@ -1,33 +1,43 @@
 require "pry-singular/version"
-require "pry-singular/parse_readline"
+require "pry-singular/slop"
+require "pry-singular/option"
 require "pry"
 
 module PrySingular
-  Options = Struct.new(:only, :except)
-
   class << self
     def make_commands(*klasses, **options)
-      options = normalize_pry_singular_options!(options)
+      options = Options.new(options)
       klasses.each do |klass|
-        import_class_command(klass, options)
+        create_singular_method_commands(klass, options)
       end
     end
 
     private
 
-    def normalize_pry_singular_options!(options)
-      Options.new(Array(options[:only]), Array(options[:except]))
+    def create_singular_method_commands(klass, options)
+      filtered_singular_methods = filter_methods_by_option(klass.singleton_methods, options)
+
+      filtered_singular_methods.each do |singular_method|
+        singular_method_command(singular_method, klass)
+      end
     end
 
-    def import_class_command(klass, options)
-      singular_methods = adapt_options_singleton_methods(klass, options)
+    def filter_methods_by_option(methods, options)
+      if options.only.any?
+        options.remove_methods_other_than_only(methods)
+      else
+        options.remove_except_methods(methods)
+      end
+    end
+
+    def singular_method_command(singular_method, klass)
       import_pry_command do
-        singular_methods.each do |klass_method|
-          command klass_method.to_s, "#{klass}.#{klass_method}" do
-            klass.class_eval <<-EOS, binding, __FILE__, __LINE__ + 1
-              #{PrySingular::Slop.parse_singular_method_command(Readline::HISTORY.to_a.last)}
-            EOS
-          end
+        command singular_method.to_s, "#{klass}.#{singular_method}" do
+          last_cui_command = Readline::HISTORY.to_a.last
+
+          klass.class_eval <<~EOS, binding, __FILE__, __LINE__ + 1
+            #{PrySingular::Slop.parse_singular_method_command(last_cui_command)}
+          EOS
         end
       end
     end
@@ -35,14 +45,6 @@ module PrySingular
     def import_pry_command(&block)
       commands = Pry::CommandSet.new(&block)
       Pry.config.commands.import(commands)
-    end
-
-    def adapt_options_singleton_methods(klass, options)
-      if options.only.any?
-        return options.only.select { |method_name| klass.respond_to?(method_name) }
-      end
-
-      klass.singleton_methods - options.except
     end
   end
 end
