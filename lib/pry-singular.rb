@@ -35,7 +35,7 @@ module PrySingular
         command singular_method.to_s, "#{klass}.#{singular_method}" do
           last_cui_command = Readline::HISTORY.to_a.last
 
-          klass.class_eval <<~EOS, binding, __FILE__, __LINE__ + 1
+          klass.class_eval <<~EOS, __FILE__, __LINE__ + 1
             #{PrySingular::Slop.parse_singular_method_command(last_cui_command)}
           EOS
         end
