@@ -21,7 +21,7 @@ Or install it yourself as:
 Set `.pryrc` as below  
 
 ```ruby
-PrySingular.set_class FooJob, FactoryBot
+PrySingular.make_commands FooJob, FactoryBot
 ```
 
 then you can use singular method of set class as pry command
@@ -37,13 +37,13 @@ Pry-Singular add only `singleton_methods(true)` for do not create core Ruby meth
 If you have a method you want to specify write　as below
 
 ```ruby
-PrySingular.set_class FactoryBot, only: [:build, :attributes_for]
+PrySingular.make_commands FactoryBot, only: [:build, :attributes_for]
 ```
 
 Also, If you have a method that you don't want to command
 
 ```ruby
-PrySingular.set_class FactoryBot, except: :create
+PrySingular.make_commands FactoryBot, except: :create
 ```
 
 
