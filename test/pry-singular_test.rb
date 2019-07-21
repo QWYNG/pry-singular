@@ -3,37 +3,38 @@ require_relative "test_helper"
 class PrySingularTest < Minitest::Test
   class TestClass1
     class << self
-      def class1method
-      end
+      def class1method; end
     end
   end
 
   class TestClass2
     class << self
-      def class2method
-      end
+      def class2method; end
     end
   end
 
-  class TestClassWithOnlyOption
+  class TestClassWithOutput
     class << self
-      def require_method
-      end
-
-      def not_require_method
+      def say(arg)
+        p arg
       end
     end
-  end
 
-  class TestClassWithExceptOption
-    class << self
-      def need_to_exclude_method
+    class TestClassWithOnlyOption
+      class << self
+        def require_method; end
+
+        def not_require_method; end
       end
+    end
 
-      def need_to_include_method1
-      end
+    class TestClassWithExceptOption
+      class << self
+        def need_to_exclude_method; end
 
-      def need_to_include_method2
+        def need_to_include_method1; end
+
+        def need_to_include_method2; end
       end
     end
   end
@@ -42,6 +43,11 @@ class PrySingularTest < Minitest::Test
     PrySingular.make_commands(TestClass1, TestClass2)
     assert_includes(Pry::Commands.list_commands, "class1method")
     assert_includes(Pry::Commands.list_commands, "class2method")
+  end
+
+  def make_command_create_command_correct
+    PrySingular.make_commands TestClassWithOutput
+    assert_output(/Hello!/) { mock_pry("say 'Hello!'") }
   end
 
   def test_avoid_setting_ancestors_class_methods

@@ -1,0 +1,6 @@
+parallel: true
+format: progress
+ignore:
+  - 'test/*':
+      - Style/EmptyMethod
+      - Style/SingleLineMethods
