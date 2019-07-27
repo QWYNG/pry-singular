@@ -4,11 +4,11 @@ module PrySingular
       super(Array(options[:only]), Array(options[:except]))
     end
 
-    def remove_methods_other_than_only(methods)
+    def adapt_only(methods)
       methods & only
     end
 
-    def remove_except_methods(methods)
+    def adapt_except(methods)
       methods - except
     end
   }
