@@ -1,15 +1,27 @@
 module PrySingular
-  Options = Struct.new(:only, :except) {
+  class << self
+    def adapt_option(methods)
+      if @options.only.any?
+        @options.adapt_only(methods)
+      else
+        @options.adapt_except(methods)
+      end
+    end
+  end
+
+  class Options
+    attr_reader :only, :except
     def initialize(**options)
-      super(Array(options[:only]), Array(options[:except]))
+      @only   = Array(options[:only])
+      @except = Array(options[:except])
     end
 
     def adapt_only(methods)
-      methods & only
+      methods & @only
     end
 
     def adapt_except(methods)
-      methods - except
+      methods - @except
     end
-  }
+  end
 end
