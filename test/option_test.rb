@@ -10,12 +10,12 @@ class PrySingular::OptionsTest < Minitest::Test
     assert_equal([:not_require_method], @option.except)
   end
 
-  def test_remove_methods_other_than_only
+  def test_adapt_only
     methods = [:require_method, :not_require_method]
     assert_equal([:require_method], @option.adapt_only(methods))
   end
 
-  def test_remove_except_methods
+  def test_adapt_except
     methods = [:require_method, :not_require_method]
     assert_equal([:require_method], @option.adapt_except(methods))
   end
