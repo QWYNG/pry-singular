@@ -19,23 +19,23 @@ class PrySingularTest < Minitest::Test
         p arg
       end
     end
+  end
 
-    class TestClassWithOnlyOption
-      class << self
-        def require_method; end
+  class TestClassWithOnlyOption
+    class << self
+      def require_method; end
 
-        def not_require_method; end
-      end
+      def not_require_method; end
     end
+  end
 
-    class TestClassWithExceptOption
-      class << self
-        def need_to_exclude_method; end
+  class TestClassWithExceptOption
+    class << self
+      def need_to_exclude_method; end
 
-        def need_to_include_method1; end
+      def need_to_include_method1; end
 
-        def need_to_include_method2; end
-      end
+      def need_to_include_method2; end
     end
   end
 
