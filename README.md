@@ -1,6 +1,9 @@
 # Pry-Singular
-[![Build Status](https://travis-ci.org/QWYNG/pry-singular.svg?branch=master)](https://travis-ci.org/QWYNG/pry-singular)
+blog https://sasa5740.hatenablog.com/entry/2019/07/15/205709
 
+
+[![Build Status](https://travis-ci.org/QWYNG/pry-singular.svg?branch=master)](https://travis-ci.org/QWYNG/pry-singular)  
+　
 ## Installation
 
 Add this line to your application's Gemfile:
