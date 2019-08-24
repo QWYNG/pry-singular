@@ -12,7 +12,7 @@ module PrySingular
   class Options
     attr_reader :only, :except
     def initialize(**options)
-      @only   = Array(options[:only])
+      @only = Array(options[:only])
       @except = Array(options[:except])
     end
 
